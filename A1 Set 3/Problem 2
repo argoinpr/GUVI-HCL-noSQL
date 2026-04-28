@@ -1,0 +1,58 @@
+// insert one
+db.rides.insertOne({
+  driverName: "Michael",
+  customerName: "Alex",
+  pickupLocation: "Downtown",
+  fare: 250,
+  rideStatus: "Pending"
+})
+
+// insert many
+db.rides.insertMany([
+  {
+    driverName: "Daniel",
+    customerName: "Emma",
+    pickupLocation: "Airport",
+    fare: 400,
+    rideStatus: "Completed"
+  },
+  {
+    driverName: "Chris",
+    customerName: "Arjun",
+    pickupLocation: "City Center",
+    fare: 150,
+    rideStatus: "Pending"
+  },
+  {
+    driverName: "James",
+    customerName: "Olivia",
+    pickupLocation: "Mall",
+    fare: 45,
+    rideStatus: "Pending"
+  },
+  {
+    driverName: "David",
+    customerName: "Noah",
+    pickupLocation: "Station",
+    fare: 320,
+    rideStatus: "In Progress"
+  }
+])
+
+// update one
+db.rides.updateOne(
+  { customerName: "Arjun" },
+  { $set: { rideStatus: "Completed" } }
+)
+
+// update many
+db.rides.updateMany(
+  { rideStatus: "Pending" },
+  { $set: { rideStatus: "In Progress" } }
+)
+
+// delete low fare
+db.rides.deleteMany({ fare: { $lt: 50 } })
+
+// find high fare
+db.rides.find({ fare: { $gt: 300 } })
