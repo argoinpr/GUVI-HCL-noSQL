@@ -1,0 +1,40 @@
+// Switch database
+use banking_db;
+
+// Insert many
+db.loans.insertMany([
+  { loan_id: "LN001", applicant_name: "Alex", loan_type: "Home", loan_amount: 4800000, interest_rate: 8.4, tenure_months: 240, application_date: ISODate("2026-04-10T00:00:00Z"), approval_status: "Pending", credit_score: 720 },
+  { loan_id: "LN002", applicant_name: "Sam", loan_type: "Car", loan_amount: 900000, interest_rate: 9.1, tenure_months: 60, application_date: ISODate("2026-04-15T00:00:00Z"), approval_status: "Pending", credit_score: 770 },
+  { loan_id: "LN003", applicant_name: "Taylor", loan_type: "Personal", loan_amount: 250000, interest_rate: 11.5, tenure_months: 24, application_date: ISODate("2022-11-20T00:00:00Z"), approval_status: "Rejected", credit_score: 640 },
+  { loan_id: "LN004", applicant_name: "Jordan", loan_type: "Home", loan_amount: 3600000, interest_rate: 8.0, tenure_months: 180, application_date: ISODate("2026-01-05T00:00:00Z"), approval_status: "Approved", credit_score: 805 },
+  { loan_id: "LN005", applicant_name: "Casey", loan_type: "Car", loan_amount: 1100000, interest_rate: 9.3, tenure_months: 48, application_date: ISODate("2026-03-22T00:00:00Z"), approval_status: "Approved", credit_score: 765 }
+]);
+
+// Find pending >700 score
+db.loans.find({
+  approval_status: "Pending",
+  credit_score: { $gt: 700 }
+});
+
+// Approve score >750
+db.loans.updateMany(
+  { credit_score: { $gt: 750 } },
+  { $set: { approval_status: "Approved" } }
+);
+
+// Delete rejected before 2023
+db.loans.deleteMany({
+  application_date: { $lt: ISODate("2023-01-01T00:00:00Z") },
+  approval_status: "Rejected"
+});
+
+// Avg loan by type
+db.loans.aggregate([
+  { $match: { approval_status: "Approved" } },
+  { 
+    $group: { 
+      _id: "$loan_type", 
+      avg_amount: { $avg: "$loan_amount" } 
+    } 
+  }
+]);
