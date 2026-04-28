@@ -1,0 +1,59 @@
+// Switch database
+use musicplaylist_app;
+
+// Insert many
+db.playlists.insertMany([
+  { 
+    playlist_id: "PL001", user_name: "Alex", playlist_name: "Background Noise", 
+    songs: [{ title: "Soft Wind", artist: "Calm" }, { title: "Quiet Stream", artist: "Stillness" }],
+    created_date: ISODate("2026-02-10T00:00:00Z"), total_duration_minutes: 120, is_public: true, play_count: 150 
+  },
+  { 
+    playlist_id: "PL002", user_name: "Sam", playlist_name: "Workout Noise", 
+    songs: [{ title: "Steady Beat", artist: "Motion" }],
+    created_date: ISODate("2026-03-01T00:00:00Z"), total_duration_minutes: 45, is_public: true, play_count: 85 
+  },
+  { 
+    playlist_id: "PL003", user_name: "Taylor", playlist_name: "Private Silence", 
+    songs: [{ title: "Silent Track", artist: "Void" }],
+    created_date: ISODate("2022-12-20T00:00:00Z"), total_duration_minutes: 60, is_public: false, play_count: 10 
+  },
+  { 
+    playlist_id: "PL004", user_name: "Jordan", playlist_name: "Background Noise 2026", 
+    songs: [{ title: "Echoes", artist: "Tone" }, { title: "Low Hum", artist: "Drone" }],
+    created_date: ISODate("2026-04-20T00:00:00Z"), total_duration_minutes: 200, is_public: true, play_count: 300 
+  },
+  { 
+    playlist_id: "PL005", user_name: "Casey", playlist_name: "Focus Noise", 
+    songs: [{ title: "Calm Work", artist: "Focus" }],
+    created_date: ISODate("2026-01-15T00:00:00Z"), total_duration_minutes: 90, is_public: true, play_count: 120 
+  }
+]);
+
+// Find public >100 plays
+db.playlists.find({
+  is_public: true,
+  play_count: { $gt: 100 }
+});
+
+// Increment play_count PL002
+db.playlists.updateOne(
+  { playlist_id: "PL002" },
+  { $inc: { play_count: 1 } }
+);
+
+// Delete private before 2023
+db.playlists.deleteMany({
+  is_public: false,
+  created_date: { $lt: ISODate("2023-01-01T00:00:00Z") }
+});
+
+// Avg duration per user
+db.playlists.aggregate([
+  {
+    $group: {
+      _id: "$user_name",
+      average_duration: { $avg: "$total_duration_minutes" }
+    }
+  }
+]);
