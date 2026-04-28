@@ -1,0 +1,27 @@
+// Insert one 
+db.contacts.insertOne({
+  contact_id: "P001",
+  first_name: "Aayush",
+  last_name: "Menon",
+  phone: "9876500001",
+  email: "aayush.menon@example.com",
+  city: "Banglore"
+});
+
+// Insert many 
+db.contacts.insertMany([
+  { contact_id: "P002", first_name: "Emma", last_name: "Johnson", phone: "5552002002", email: "emma.johnson@example.com", city: "New York" },
+  { contact_id: "P003", first_name: "Liam", last_name: "Smith", phone: "5552002003", email: "liam.smith@example.com", city: "London" },
+  { contact_id: "P004", first_name: "Olivia", last_name: "Brown", phone: "5552002004", email: "olivia.brown@example.com", city: "Toronto" },
+  { contact_id: "P005", first_name: "Noah", last_name: "Williams", phone: "5552002005", email: "noah.williams@example.com", city: "Sydney" },
+  { contact_id: "P006", first_name: "Sophia", last_name: "Davis", phone: "5552002006", email: "sophia.davis@example.com", city: "Berlin" }
+]);
+
+// Find by city
+db.contacts.find({ city: "London" });
+
+// Show selected fields
+db.contacts.find({}, { first_name: 1, last_name: 1, phone: 1, _id: 0 });
+
+// Delete
+db.contacts.deleteOne({ contact_id: "P005" });
