@@ -1,0 +1,27 @@
+// Insert one
+db.expenses.insertOne({
+  expense_id: "X001",
+  category: "Food",
+  amount: 20,
+  date: "2026-04-25",
+  payment_method: "Card",
+  note: "Lunch"
+});
+
+// Insert many
+db.expenses.insertMany([
+  { expense_id: "X002", category: "Transport", amount: 15, date: "2026-04-24", payment_method: "Cash", note: "Bus fare" },
+  { expense_id: "X003", category: "Entertainment", amount: 30, date: "2026-04-23", payment_method: "Card", note: "Movie" },
+  { expense_id: "X004", category: "Bills", amount: 50, date: "2026-04-22", payment_method: "Card", note: "Electricity" },
+  { expense_id: "X005", category: "Food", amount: 10, date: "2026-04-21", payment_method: "Cash", note: "Snacks" },
+  { expense_id: "X006", category: "Transport", amount: 8, date: "2026-04-20", payment_method: "Card", note: "Metro ticket" }
+]);
+
+// Find expenses > 20
+db.expenses.find({ amount: { $gt: 20 } });
+
+// Show category, amount, date
+db.expenses.find({}, { category: 1, amount: 1, date: 1, _id: 0 });
+
+// Delete
+db.expenses.deleteOne({ expense_id: "X001" });
