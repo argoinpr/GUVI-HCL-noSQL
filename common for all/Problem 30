@@ -1,0 +1,35 @@
+// Switch database
+use quality_control;
+
+// Insert many
+db.defects.insertMany([
+  { defect_id: "DF001", product_name: "Display Panel", batch_number: "BN101", defect_type: "Functional", detection_date: ISODate("2026-04-20T00:00:00Z"), severity: "High", quantity_affected: 40, root_cause: "Calibration issue", status: "Open", resolution_date: null },
+  { defect_id: "DF002", product_name: "Outer Shell", batch_number: "BN102", defect_type: "Cosmetic", detection_date: ISODate("2026-04-25T00:00:00Z"), severity: "Low", quantity_affected: 180, root_cause: "Surface scratch", status: "Investigating", resolution_date: null },
+  { defect_id: "DF003", product_name: "Power Unit", batch_number: "BN103", defect_type: "Safety", detection_date: ISODate("2025-10-10T00:00:00Z"), severity: "High", quantity_affected: 12, root_cause: "Overheating", status: "Open", resolution_date: null },
+  { defect_id: "DF004", product_name: "Control Board", batch_number: "BN104", defect_type: "Functional", detection_date: ISODate("2021-11-05T00:00:00Z"), severity: "Medium", quantity_affected: 95, root_cause: "Wiring fault", status: "Resolved", resolution_date: ISODate("2021-12-01T00:00:00Z") },
+  { defect_id: "DF005", product_name: "Instruction Guide", batch_number: "BN105", defect_type: "Cosmetic", detection_date: ISODate("2026-04-26T00:00:00Z"), severity: "Medium", quantity_affected: 450, root_cause: "Typo error", status: "Investigating", resolution_date: null }
+]);
+
+// Find high open defects
+db.defects.find({
+  severity: "High",
+  status: "Open"
+});
+
+// Resolve documented causes
+db.defects.updateMany(
+  { root_cause: { $ne: null } },
+  { $set: { status: "Resolved", resolution_date: ISODate("2026-04-26T00:00:00Z") } }
+);
+
+// Delete resolved before 2022
+db.defects.deleteMany({
+  detection_date: { $lt: ISODate("2022-01-01T00:00:00Z") },
+  status: "Resolved"
+});
+
+// Impact per defect type
+db.defects.aggregate([
+  { $group: { _id: "$defect_type", total_impact: { $sum: "$quantity_affected" } } },
+  { $sort: { total_impact: -1 } }
+]);
