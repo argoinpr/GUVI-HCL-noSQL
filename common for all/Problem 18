@@ -1,0 +1,34 @@
+// Switch to database
+use gym_management;
+
+// Insert many
+db.equipment.insertMany([
+  { equip_id: "EQ001", equip_name: "Treadmill X1", category: "Cardio", purchase_date: ISODate("2024-05-10T00:00:00Z"), last_maintenance_date: ISODate("2026-02-15T00:00:00Z"), next_maintenance_date: ISODate("2026-08-15T00:00:00Z"), condition: "Good" },
+  { equip_id: "EQ002", equip_name: "Stationary Bike", category: "Cardio", purchase_date: ISODate("2023-11-01T00:00:00Z"), last_maintenance_date: ISODate("2025-10-01T00:00:00Z"), next_maintenance_date: ISODate("2026-04-01T00:00:00Z"), condition: "NeedsService" },
+  { equip_id: "EQ003", equip_name: "Bench Press", category: "Strength", purchase_date: ISODate("2014-06-20T00:00:00Z"), last_maintenance_date: ISODate("2024-12-01T00:00:00Z"), next_maintenance_date: ISODate("2025-06-01T00:00:00Z"), condition: "OutOfOrder" },
+  { equip_id: "EQ004", equip_name: "Rowing Machine", category: "Cardio", purchase_date: ISODate("2025-01-15T00:00:00Z"), last_maintenance_date: ISODate("2026-01-20T00:00:00Z"), next_maintenance_date: ISODate("2026-07-20T00:00:00Z"), condition: "Good" },
+  { equip_id: "EQ005", equip_name: "Leg Press", category: "Strength", purchase_date: ISODate("2022-03-05T00:00:00Z"), last_maintenance_date: ISODate("2025-09-10T00:00:00Z"), next_maintenance_date: ISODate("2026-03-10T00:00:00Z"), condition: "NeedsService" }
+]);
+
+// Find equipment needing service or out of order
+db.equipment.find({
+  $or: [
+    { condition: "NeedsService" },
+    { condition: "OutOfOrder" }
+  ]
+});
+
+// Update condition to Good if serviced after Jan 1, 2025
+db.equipment.updateMany(
+  { last_maintenance_date: { $gt: ISODate("2025-01-01T00:00:00Z") } },
+  { $set: { condition: "Good" } }
+);
+
+// Delete OutOfOrder equipment purchased before 2015
+db.equipment.deleteMany({
+  purchase_date: { $lt: ISODate("2015-01-01T00:00:00Z") },
+  condition: "OutOfOrder"
+});
+
+// Find all equipment sorted by next maintenance date
+db.equipment.find().sort({ next_maintenance_date: 1 });
