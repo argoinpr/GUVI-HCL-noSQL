@@ -1,0 +1,56 @@
+// insert one
+db.courses.insertOne({
+  courseName: "Intro to Programming",
+  instructor: "Alex",
+  duration: 40,
+  enrolledStudents: 120,
+  category: "Programming"
+})
+
+// insert many
+db.courses.insertMany([
+  {
+    courseName: "UI Design Basics",
+    instructor: "Emma",
+    duration: 25,
+    enrolledStudents: 80,
+    category: "Design"
+  },
+  {
+    courseName: "Advanced JavaScript",
+    instructor: "Liam",
+    duration: 35,
+    enrolledStudents: 150,
+    category: "Programming"
+  },
+  {
+    courseName: "Business Strategy",
+    instructor: "Olivia",
+    duration: 45,
+    enrolledStudents: 200,
+    category: "Business"
+  },
+  {
+    courseName: "Data Structures",
+    instructor: "John",
+    duration: 30,
+    enrolledStudents: 110,
+    category: "Programming"
+  }
+])
+
+// duration > 30
+db.courses.find({ duration: { $gt: 30 } })
+
+// programming & duration > 20
+db.courses.find({
+  category: "Programming",
+  duration: { $gt: 20 }
+})
+
+// complex filter + sort
+db.courses.find({
+  instructor: { $ne: "John" },
+  category: { $in: ["Design", "Business"] }
+})
+.sort({ enrolledStudents: -1 })
