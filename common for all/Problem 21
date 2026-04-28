@@ -1,0 +1,38 @@
+// Switch to database
+use ecommerce_db;
+
+// Insert many
+db.wishlists.insertMany([
+  { wishlist_id: "WL001", customer_name: "Alex", product_name: "Bluetooth Speaker", product_category: "Electronics", price: 2500, added_date: ISODate("2026-02-10T00:00:00Z"), notify_when_available: true },
+  { wishlist_id: "WL002", customer_name: "Sam", product_name: "Journal Book", product_category: "Stationery", price: 450, added_date: ISODate("2026-04-15T00:00:00Z"), notify_when_available: true },
+  { wishlist_id: "WL003", customer_name: "Taylor", product_name: "USB-C Cable", product_category: "Electronics", price: 800, added_date: ISODate("2024-11-20T00:00:00Z"), notify_when_available: true },
+  { wishlist_id: "WL004", customer_name: "Jordan", product_name: "Yoga Mat", product_category: "Fitness", price: 1500, added_date: ISODate("2026-03-05T00:00:00Z"), notify_when_available: false },
+  { wishlist_id: "WL005", customer_name: "Casey", product_name: "Headphones", product_category: "Electronics", price: 5000, added_date: ISODate("2026-03-22T00:00:00Z"), notify_when_available: true }
+]);
+
+// Find wishlist items <2000 AND notify_when_available is true
+db.wishlists.find({
+  price: { $lt: 2000 },
+  notify_when_available: true
+});
+
+// Apply 20% discount to all Electronics
+db.wishlists.updateMany(
+  { product_category: "Electronics" },
+  { $mul: { price: 0.8 } }
+);
+
+// Delete items added before Jan 1, 2025
+db.wishlists.deleteMany({
+  added_date: { $lt: ISODate("2025-01-01T00:00:00Z") }
+});
+
+// Count items per customer
+db.wishlists.aggregate([
+  {
+    $group: {
+      _id: "$customer_name", 
+      total_items: { $sum: 1 }
+    }
+  }
+]);
