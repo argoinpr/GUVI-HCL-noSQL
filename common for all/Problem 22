@@ -1,0 +1,32 @@
+// Switch to database
+use travel_agency;
+
+// Insert many
+db.itineraries.insertMany([
+  { itinerary_id: "IT001", customer_name: "Alex", destination: "Manali", trip_start_date: ISODate("2026-05-10T00:00:00Z"), trip_end_date: ISODate("2026-05-15T00:00:00Z"), budget: 60000, activities: ["Trekking", "Skiing", "Camping"], hotel_name: "Mountain View", booking_status: "Confirmed" },
+  { itinerary_id: "IT002", customer_name: "Sam", destination: "Goa", trip_start_date: ISODate("2026-04-20T00:00:00Z"), trip_end_date: ISODate("2026-04-25T00:00:00Z"), budget: 45000, activities: ["Surfing", "Beach Volleyball"], hotel_name: "Sun Resort", booking_status: "Confirmed" },
+  { itinerary_id: "IT003", customer_name: "Taylor", destination: "Leh", trip_start_date: ISODate("2026-06-01T00:00:00Z"), trip_end_date: ISODate("2026-06-10T00:00:00Z"), budget: 75000, activities: ["Trekking", "Biking"], hotel_name: "Himalayan Stay", booking_status: "Pending" },
+  { itinerary_id: "IT004", customer_name: "Jordan", destination: "Jaipur", trip_start_date: ISODate("2024-12-15T00:00:00Z"), trip_end_date: ISODate("2024-12-20T00:00:00Z"), budget: 30000, activities: ["Sightseeing", "Shopping"], hotel_name: "Royal Palace", booking_status: "Cancelled" },
+  { itinerary_id: "IT005", customer_name: "Casey", destination: "Coorg", trip_start_date: ISODate("2026-04-22T00:00:00Z"), trip_end_date: ISODate("2026-04-27T00:00:00Z"), budget: 55000, activities: ["Coffee Tour", "Trekking"], hotel_name: "Green Glen", booking_status: "Confirmed" }
+]);
+
+// Find confirmed itineraries with budget > 50,000
+db.itineraries.find({
+  booking_status: "Confirmed",
+  budget: { $gt: 50000 }
+});
+
+// Update status to Cancelled for trips starting before Apr 26, 2026
+db.itineraries.updateMany(
+  { trip_start_date: { $lt: ISODate("2026-04-26T00:00:00Z") } },
+  { $set: { booking_status: "Cancelled" } }
+);
+
+// Delete cancelled trips ending before 2025
+db.itineraries.deleteMany({
+  booking_status: "Cancelled",
+  trip_end_date: { $lt: ISODate("2025-01-01T00:00:00Z") }
+});
+
+// Find all trips that include Trekking
+db.itineraries.find({ activities: "Trekking" });
