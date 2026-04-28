@@ -1,0 +1,35 @@
+// Switch to database
+use cab_service;
+
+// Insert many
+db.rides.insertMany([
+  { ride_id: "CAB001", rider_name: "Alex", driver_name: "Sam", pickup_location: "MG Road", drop_location: "Indiranagar", ride_date: ISODate("2026-05-01T00:00:00Z"), distance_km: 12, fare: 450, ride_status: "Requested" },
+  { ride_id: "CAB002", rider_name: "Taylor", driver_name: "Jordan", pickup_location: "Whitefield", drop_location: "Koramangala", ride_date: ISODate("2026-05-01T00:00:00Z"), distance_km: 15, fare: 550, ride_status: "Accepted" },
+  { ride_id: "CAB003", rider_name: "Casey", driver_name: "Morgan", pickup_location: "Airport", drop_location: "Hebbal", ride_date: ISODate("2024-05-15T00:00:00Z"), distance_km: 25, fare: 900, ride_status: "Cancelled" },
+  { ride_id: "CAB004", rider_name: "Jordan", driver_name: "Chris", pickup_location: "Jayanagar", drop_location: "Electronic City", ride_date: ISODate("2026-05-01T00:00:00Z"), distance_km: 8, fare: 250, ride_status: "Requested" },
+  { ride_id: "CAB005", rider_name: "Robin", driver_name: "Taylor", pickup_location: "BTM Layout", drop_location: "HSR Layout", ride_date: ISODate("2026-04-30T00:00:00Z"), distance_km: 5, fare: 150, ride_status: "Completed" }
+]);
+
+// Find rides that are "Requested" for today
+db.rides.find({
+  ride_status: "Requested",
+  ride_date: ISODate("2026-05-01T00:00:00Z")
+});
+
+// Set status to "Completed" where drop_location exists
+db.rides.updateMany(
+  { drop_location: { $ne: null } },
+  { $set: { ride_status: "Completed" } }
+);
+
+// Delete cancelled rides before June 1, 2024
+db.rides.deleteMany({
+  ride_status: "Cancelled",
+  ride_date: { $lt: ISODate("2024-06-01T00:00:00Z") }
+});
+
+// Find rides >10km AND fare >300
+db.rides.find({
+  distance_km: { $gt: 10 },
+  fare: { $gt: 300 }
+});
