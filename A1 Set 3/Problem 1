@@ -1,0 +1,55 @@
+// insert one
+db.members.insertOne({
+  memberName: "Alex",
+  age: 24,
+  membershipType: "Premium",
+  trainer: "Chris",
+  isActive: true
+})
+
+// insert many
+db.members.insertMany([
+  {
+    memberName: "Emma",
+    age: 28,
+    membershipType: "Basic",
+    trainer: "Sophia",
+    isActive: true
+  },
+  {
+    memberName: "Liam",
+    age: 32,
+    membershipType: "Premium",
+    trainer: "James",
+    isActive: false
+  },
+  {
+    memberName: "Olivia",
+    age: 22,
+    membershipType: "Premium",
+    trainer: "Chris",
+    isActive: true
+  },
+  {
+    memberName: "Noah",
+    age: 30,
+    membershipType: "Standard",
+    trainer: "Sophia",
+    isActive: true
+  }
+])
+
+// find all
+db.members.find()
+
+// projection
+db.members.find({}, {
+  memberName: 1,
+  membershipType: 1,
+  _id: 0
+})
+
+// filter sort limit
+db.members.find({ membershipType: "Premium" })
+  .sort({ age: 1 })
+  .limit(5)
