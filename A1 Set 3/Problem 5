@@ -1,0 +1,82 @@
+// insert sample data
+db.tickets.insertMany([
+  {
+    eventName: "Concert A",
+    location: "London",
+    ticketsSold: 300,
+    revenue: 60000
+  },
+  {
+    eventName: "Concert B",
+    location: "Paris",
+    ticketsSold: 150,
+    revenue: 30000
+  },
+  {
+    eventName: "Festival X",
+    location: "London",
+    ticketsSold: 500,
+    revenue: 90000
+  },
+  {
+    eventName: "Play Y",
+    location: "Berlin",
+    ticketsSold: 200,
+    revenue: 40000
+  },
+  {
+    eventName: "Concert A",
+    location: "Paris",
+    ticketsSold: 250,
+    revenue: 55000
+  }
+])
+
+// total revenue
+db.tickets.aggregate([
+  {
+    $group: {
+      _id: null,
+      totalRevenue: { $sum: "$revenue" }
+    }
+  }
+])
+
+// avg tickets per location
+db.tickets.aggregate([
+  {
+    $group: {
+      _id: "$location",
+      avgTickets: { $avg: "$ticketsSold" }
+    }
+  }
+])
+
+// tickets per event
+db.tickets.aggregate([
+  {
+    $group: {
+      _id: "$eventName",
+      totalTickets: { $sum: "$ticketsSold" }
+    }
+  }
+])
+
+// top 3 revenue events (>50000 before grouping)
+db.tickets.aggregate([
+  {
+    $match: { revenue: { $gt: 50000 } }
+  },
+  {
+    $group: {
+      _id: "$eventName",
+      totalRevenue: { $sum: "$revenue" }
+    }
+  },
+  {
+    $sort: { totalRevenue: -1 }
+  },
+  {
+    $limit: 3
+  }
+])
