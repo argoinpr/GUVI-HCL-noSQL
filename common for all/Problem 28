@@ -1,0 +1,39 @@
+// Switch database
+use event_management;
+
+// Insert many
+db.bookings.insertMany([
+  { booking_id: "BK001", event_name: "Tech Summit 2026", event_date: ISODate("2026-11-15T00:00:00Z"), venue: "Main Convention Hall", customer_name: "Alex", ticket_type: "VIP", number_of_tickets: 2, total_price: 5200, booking_date: ISODate("2026-04-10T00:00:00Z"), payment_status: "Paid" },
+  { booking_id: "BK002", event_name: "Music Fest 2026", event_date: ISODate("2026-12-05T00:00:00Z"), venue: "Open Theater", customer_name: "Sam", ticket_type: "General", number_of_tickets: 4, total_price: 2200, booking_date: ISODate("2026-04-20T00:00:00Z"), payment_status: "Paid" },
+  { booking_id: "BK003", event_name: "Tech Summit 2026", event_date: ISODate("2026-11-15T00:00:00Z"), venue: "Main Convention Hall", customer_name: "Taylor", ticket_type: "Student", number_of_tickets: 1, total_price: 900, booking_date: ISODate("2026-03-01T00:00:00Z"), payment_status: "Paid" },
+  { booking_id: "BK004", event_name: "Art Expo 2024", event_date: ISODate("2024-12-01T00:00:00Z"), venue: "Gallery Center", customer_name: "Jordan", ticket_type: "General", number_of_tickets: 2, total_price: 650, booking_date: ISODate("2024-11-15T00:00:00Z"), payment_status: "Paid" },
+  { booking_id: "BK005", event_name: "Gaming Con 2026", event_date: ISODate("2026-05-10T00:00:00Z"), venue: "Arena Hall", customer_name: "Casey", ticket_type: "VIP", number_of_tickets: 3, total_price: 7800, booking_date: ISODate("2026-01-25T00:00:00Z"), payment_status: "Pending" }
+]);
+
+// Find paid after Oct 2026
+db.bookings.find({
+  event_date: { $gt: ISODate("2026-10-01T00:00:00Z") },
+  payment_status: "Paid"
+});
+
+// Refund past paid events
+db.bookings.updateMany(
+  { event_date: { $lt: ISODate("2026-04-26T00:00:00Z") }, payment_status: "Paid" },
+  { $set: { payment_status: "Refunded" } }
+);
+
+// Delete pending before 2024
+db.bookings.deleteMany({
+  payment_status: "Pending",
+  booking_date: { $lt: ISODate("2024-01-01T00:00:00Z") }
+});
+
+// Total tickets per event
+db.bookings.aggregate([
+  {
+    $group: {
+      _id: "$event_name",
+      total_tickets: { $sum: "$number_of_tickets" }
+    }
+  }
+]);
