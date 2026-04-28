@@ -1,0 +1,26 @@
+// Insert one
+db.menu.insertOne({
+  item_id: "I001",
+  name: "Latte",
+  category: "Coffee",
+  price: 3.50,
+  availability: true
+});
+
+// Insert many
+db.menu.insertMany([
+  { item_id: "I002", name: "Americano", category: "Coffee", price: 3.00, availability: true },
+  { item_id: "I003", name: "Chamomile Tea", category: "Tea", price: 2.50, availability: true },
+  { item_id: "I004", name: "Iced Lemon Tea", category: "Tea", price: 2.80, availability: false },
+  { item_id: "I005", name: "Banana Bread", category: "Snack", price: 2.20, availability: true },
+  { item_id: "I006", name: "Almond Croissant", category: "Snack", price: 2.70, availability: false }
+]);
+
+// Find available
+db.menu.find({ availability: true });
+
+// Show name & price
+db.menu.find({}, { name: 1, price: 1, _id: 0 });
+
+// Delete
+db.menu.deleteOne({ item_id: "I003" });
