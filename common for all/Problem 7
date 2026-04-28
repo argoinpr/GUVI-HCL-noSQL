@@ -1,0 +1,26 @@
+// Insert one
+db.parking.insertOne({
+  slot_id: "S001",
+  floor: 1,
+  vehicle_type: "Car",
+  is_occupied: true,
+  vehicle_number: "AB-1234"
+});
+
+// Insert many
+db.parking.insertMany([
+  { slot_id: "S002", floor: 1, vehicle_type: "Car", is_occupied: false, vehicle_number: null },
+  { slot_id: "S003", floor: 2, vehicle_type: "Bike", is_occupied: true, vehicle_number: "XY-9876" },
+  { slot_id: "S004", floor: 2, vehicle_type: "Bike", is_occupied: false, vehicle_number: null },
+  { slot_id: "S005", floor: 3, vehicle_type: "Car", is_occupied: true, vehicle_number: "PQ-4567" },
+  { slot_id: "S006", floor: 1, vehicle_type: "Car", is_occupied: false, vehicle_number: null }
+]);
+
+// Find empty slots
+db.parking.find({ is_occupied: false });
+
+// Show slot, floor, type
+db.parking.find({}, { slot_id: 1, floor: 1, vehicle_type: 1, _id: 0 });
+
+// Delete
+db.parking.deleteOne({ slot_id: "S001" });
