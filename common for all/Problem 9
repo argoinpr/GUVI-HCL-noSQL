@@ -1,0 +1,28 @@
+// Insert one
+db.parcels.insertOne({ 
+  parcel_id: "X001",
+  sender_name: "Alex",
+  receiver_name: "Sam",
+  weight: 2.0,
+  shipping_cost: 100,
+  booking_date: "2026-04-20",
+  delivery_status: "Pending"
+});
+
+// Insert many
+db.parcels.insertMany([
+  { parcel_id: "X002", sender_name: "Taylor", receiver_name: "Jordan", weight: 1.2, shipping_cost: 60, booking_date: "2026-04-21", delivery_status: "Shipped" },
+  { parcel_id: "X003", sender_name: "Casey", receiver_name: "Morgan", weight: 4.5, shipping_cost: 250, booking_date: "2026-04-22", delivery_status: "Pending" },
+  { parcel_id: "X004", sender_name: "Jamie", receiver_name: "Chris", weight: 0.8, shipping_cost: 40, booking_date: "2026-04-23", delivery_status: "Delivered" },
+  { parcel_id: "X005", sender_name: "Drew", receiver_name: "Robin", weight: 3.0, shipping_cost: 180, booking_date: "2026-04-24", delivery_status: "Pending" },
+  { parcel_id: "X006", sender_name: "Jordan", receiver_name: "Taylor", weight: 1.5, shipping_cost: 90, booking_date: "2026-04-25", delivery_status: "Shipped" }
+]);
+
+// Find pending
+db.parcels.find({ delivery_status: "Pending" });
+
+// Show sender, receiver, cost
+db.parcels.find({}, { sender_name: 1, receiver_name: 1, shipping_cost: 1, _id: 0 });
+
+// Delete
+db.parcels.deleteOne({ parcel_id: "X001" });
