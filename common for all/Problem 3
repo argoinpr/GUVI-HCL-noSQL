@@ -1,0 +1,27 @@
+// Insert one
+db.tasks.insertOne({
+  task_id: "T001",
+  title: "Do homework",
+  description: "Math exercises",
+  due_date: "2026-05-01",
+  priority: "High",
+  is_completed: false
+});
+
+// Insert many
+db.tasks.insertMany([
+  { task_id: "T002", title: "Buy food", description: "Bread and milk", due_date: "2026-04-29", priority: "Medium", is_completed: false },
+  { task_id: "T003", title: "Read book", description: "One chapter", due_date: "2026-04-30", priority: "Low", is_completed: true },
+  { task_id: "T004", title: "Pay bill", description: "Electricity", due_date: "2026-04-28", priority: "High", is_completed: false },
+  { task_id: "T005", title: "Call friend", description: "Quick chat", due_date: "2026-04-27", priority: "Medium", is_completed: true },
+  { task_id: "T006", title: "Exercise", description: "Jogging", due_date: "2026-04-29", priority: "Low", is_completed: false }
+]);
+
+// Find incomplete
+db.tasks.find({ is_completed: false });
+
+// Show title & due_date
+db.tasks.find({}, { title: 1, due_date: 1, _id: 0 });
+
+// Delete
+db.tasks.deleteOne({ task_id: "T003" });
