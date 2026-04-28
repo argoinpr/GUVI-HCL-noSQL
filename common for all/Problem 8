@@ -1,0 +1,31 @@
+// Insert one
+db.giftcards.insertOne({
+  card_id: "G001",
+  recipient_name: "Alex",
+  sender_name: "Sam",
+  amount: 100,
+  purchase_date: "2026-04-01",
+  expiry_date: "2026-12-31",
+  is_used: false
+});
+
+// Insert many
+db.giftcards.insertMany([
+  { card_id: "G002", recipient_name: "Taylor", sender_name: "Jordan", amount: 50, purchase_date: "2026-03-15", expiry_date: "2026-09-30", is_used: true },
+  { card_id: "G003", recipient_name: "Casey", sender_name: "Morgan", amount: 200, purchase_date: "2026-04-20", expiry_date: "2027-04-20", is_used: false },
+  { card_id: "G004", recipient_name: "Jamie", sender_name: "Chris", amount: 150, purchase_date: "2026-01-10", expiry_date: "2026-06-30", is_used: false },
+  { card_id: "G005", recipient_name: "Drew", sender_name: "Alex", amount: 300, purchase_date: "2026-02-14", expiry_date: "2026-02-14", is_used: true },
+  { card_id: "G006", recipient_name: "Robin", sender_name: "Taylor", amount: 80, purchase_date: "2026-04-25", expiry_date: "2027-04-25", is_used: false }
+]);
+
+// Find unused and valid
+db.giftcards.find({ 
+  is_used: false, 
+  expiry_date: { $gt: "2026-05-01" } 
+});
+
+// Show recipient, amount, expiry
+db.giftcards.find({}, { recipient_name: 1, amount: 1, expiry_date: 1, _id: 0 });
+
+// Delete
+db.giftcards.deleteOne({ card_id: "G002" });
