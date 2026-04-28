@@ -1,0 +1,32 @@
+// Switch database
+use logistics_db;
+
+// Insert many
+db.riders.insertMany([
+  { rider_id: "RID001", rider_name: "Alex", city: "Los A", vehicle_type: "Motorcycle", total_deliveries: 25, average_rating: 4.8, current_status: "Available", earnings_today: 500, delivery_history: ["ORD101", "ORD105", "ORD112"], joined_date: ISODate("2026-03-10T00:00:00Z") },
+  { rider_id: "RID002", rider_name: "Sam", city: "NYC", vehicle_type: "Scooter", total_deliveries: 15, average_rating: 4.2, current_status: "Busy", earnings_today: 300, delivery_history: ["ORD109", "ORD115"], joined_date: ISODate("2026-04-15T00:00:00Z") },
+  { rider_id: "RID003", rider_name: "Taylor", city: "Burm", vehicle_type: "Motorcycle", total_deliveries: 30, average_rating: 4.9, current_status: "Available", earnings_today: 750, delivery_history: ["ORD120", "ORD122", "ORD130"], joined_date: ISODate("2026-02-20T00:00:00Z") },
+  { rider_id: "RID004", rider_name: "Jordan", city: "Worschester", vehicle_type: "Scooter", total_deliveries: 0, average_rating: 0, current_status: "Offline", earnings_today: 0, delivery_history: [], joined_date: ISODate("2025-12-01T00:00:00Z") },
+  { rider_id: "RID005", rider_name: "Casey", city: "Sydney", vehicle_type: "Motorcycle", total_deliveries: 22, average_rating: 4.6, current_status: "Available", earnings_today: 450, delivery_history: ["ORD150", "ORD155"], joined_date: ISODate("2026-01-22T00:00:00Z") }
+]);
+
+// Find available >4.5 rating
+db.riders.find({
+  current_status: "Available",
+  average_rating: { $gt: 4.5 }
+});
+
+// Add bonus >20 deliveries
+db.riders.updateMany(
+  { total_deliveries: { $gt: 20 } },
+  { $inc: { earnings_today: 100 } }
+);
+
+// Delete offline 0 deliveries
+db.riders.deleteMany({
+  current_status: "Offline",
+  total_deliveries: 0
+});
+
+// Create index delivery_history
+db.riders.createIndex({ delivery_history: 1 });
