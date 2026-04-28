@@ -1,0 +1,29 @@
+// Insert many
+db.subscriptions.insertMany([
+  { sub_id: "S001", user_name: "Alex", plan_type: "Premium", monthly_fee: 50, start_date: "2026-01-01", renewal_date: "2026-05-01", is_active: true },
+  { sub_id: "S002", user_name: "Sam", plan_type: "Basic", monthly_fee: 20, start_date: "2024-05-15", renewal_date: "2024-06-15", is_active: false },
+  { sub_id: "S003", user_name: "Taylor", plan_type: "Standard", monthly_fee: 35, start_date: "2025-10-20", renewal_date: "2026-10-20", is_active: true },
+  { sub_id: "S004", user_name: "Jordan", plan_type: "Basic", monthly_fee: 20, start_date: "2026-03-10", renewal_date: "2026-04-10", is_active: true },
+  { sub_id: "S005", user_name: "Casey", plan_type: "Premium", monthly_fee: 50, start_date: "2023-11-01", renewal_date: "2024-11-01", is_active: false }
+]);
+
+// Find active Premium
+db.subscriptions.find({ is_active: true, plan_type: "Premium" });
+
+// Update Basic fees (+10)
+db.subscriptions.updateMany(
+  { plan_type: "Basic" },
+  { $inc: { monthly_fee: 10 } }
+);
+
+// Delete inactive before 2025
+db.subscriptions.deleteMany({ 
+  is_active: false, 
+  renewal_date: { $lt: "2025-01-01" } 
+});
+
+// Show sorted by fee
+db.subscriptions.find(
+  {}, 
+  { user_name: 1, plan_type: 1, monthly_fee: 1, _id: 0 }
+).sort({ monthly_fee: -1 });
