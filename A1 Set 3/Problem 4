@@ -1,0 +1,47 @@
+// insert sample data
+db.inventory.insertMany([
+  {
+    itemName: "Laptop",
+    category: "Electronics",
+    quantity: 50,
+    supplier: "TechCorp",
+    price: 800
+  },
+  {
+    itemName: "Mouse",
+    category: "Electronics",
+    quantity: 200,
+    supplier: "GadgetPro",
+    price: 20
+  },
+  {
+    itemName: "Chair",
+    category: "Furniture",
+    quantity: 75,
+    supplier: "FurniCo",
+    price: 120
+  },
+  {
+    itemName: "Desk",
+    category: "Furniture",
+    quantity: 40,
+    supplier: "FurniCo",
+    price: 300
+  },
+  {
+    itemName: "Notebook",
+    category: "Stationery",
+    quantity: 500,
+    supplier: "PaperWorld",
+    price: 5
+  }
+])
+
+// index on itemName
+db.inventory.createIndex({ itemName: 1 })
+
+// compound index on category + price
+db.inventory.createIndex({ category: 1, price: 1 })
+
+// explain query
+db.inventory.find({ category: "Electronics" }).explain("executionStats")
