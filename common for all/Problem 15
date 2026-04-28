@@ -1,0 +1,35 @@
+// Switch to database
+use book_club;
+
+// Insert many
+db.reading_progress.insertMany([
+  { record_id: "RP001", member_name: "Alex", book_title: "The Great Gatsby", genre: "Fiction", pages_read: 180, total_pages: 180, start_date: ISODate("2026-02-01T00:00:00Z"), completion_date: ISODate("2026-02-15T00:00:00Z"), is_completed: true },
+  { record_id: "RP002", member_name: "Sam", book_title: "Dune", genre: "Sci-Fi", pages_read: 150, total_pages: 412, start_date: ISODate("2026-03-01T00:00:00Z"), completion_date: null, is_completed: false },
+  { record_id: "RP003", member_name: "Taylor", book_title: "Sapiens", genre: "Non-Fiction", pages_read: 50, total_pages: 443, start_date: ISODate("2024-11-20T00:00:00Z"), completion_date: null, is_completed: false },
+  { record_id: "RP004", member_name: "Jordan", book_title: "The Hobbit", genre: "Fantasy", pages_read: 310, total_pages: 310, start_date: ISODate("2026-01-10T00:00:00Z"), completion_date: ISODate("2026-01-25T00:00:00Z"), is_completed: true },
+  { record_id: "RP005", member_name: "Casey", book_title: "1984", genre: "Fiction", pages_read: 120, total_pages: 328, start_date: ISODate("2026-03-15T00:00:00Z"), completion_date: null, is_completed: false }
+]);
+
+// Find incomplete books with >100 pages read
+db.reading_progress.find({
+  is_completed: false,
+  pages_read: { $gt: 100 }
+});
+
+// Mark completed if completion_date exists
+db.reading_progress.updateMany(
+  { completion_date: { $ne: null } },
+  { $set: { is_completed: true } }
+);
+
+// Delete incomplete records before 2025
+db.reading_progress.deleteMany({
+  start_date: { $lt: ISODate("2025-01-01T00:00:00Z") },
+  is_completed: false
+});
+
+// Find completed Fiction books
+db.reading_progress.find({
+  genre: "Fiction",
+  is_completed: true
+});
