@@ -1,0 +1,35 @@
+// Switch to database
+use pharmacy_db;
+
+// Insert many
+db.prescriptions.insertMany([
+  { prescription_id: "PR001", patient_name: "Alex", doctor_name: "Dr. Taylor", medicine_name: "Amoxicillin", dosage: "500mg", issue_date: ISODate("2026-04-10T00:00:00Z"), expiry_date: ISODate("2026-05-10T00:00:00Z"), status: "Active" },
+  { prescription_id: "PR002", patient_name: "Sam", doctor_name: "Dr. Jordan", medicine_name: "Lisinopril", dosage: "10mg", issue_date: ISODate("2026-04-20T00:00:00Z"), expiry_date: ISODate("2027-04-20T00:00:00Z"), status: "Active" },
+  { prescription_id: "PR003", patient_name: "Casey", doctor_name: "Dr. Morgan", medicine_name: "Metformin", dosage: "850mg", issue_date: ISODate("2024-11-01T00:00:00Z"), expiry_date: ISODate("2025-05-01T00:00:00Z"), status: "Fulfilled" },
+  { prescription_id: "PR004", patient_name: "Taylor", doctor_name: "Dr. Chris", medicine_name: "Ibuprofen", dosage: "400mg", issue_date: ISODate("2025-12-01T00:00:00Z"), expiry_date: ISODate("2026-04-01T00:00:00Z"), status: "Active" },
+  { prescription_id: "PR005", patient_name: "Jordan", doctor_name: "Dr. Alex", medicine_name: "Atorvastatin", dosage: "20mg", issue_date: ISODate("2023-05-15T00:00:00Z"), expiry_date: ISODate("2023-11-15T00:00:00Z"), status: "Fulfilled" }
+]);
+
+// Find active prescriptions not expired
+db.prescriptions.find({
+  status: "Active",
+  expiry_date: { $gt: ISODate("2026-04-26T00:00:00Z") }
+});
+
+// Mark overdue prescriptions as Expired
+db.prescriptions.updateMany(
+  { expiry_date: { $lt: ISODate("2026-04-26T00:00:00Z") } },
+  { $set: { status: "Expired" } }
+);
+
+// Delete fulfilled prescriptions before 2025
+db.prescriptions.deleteMany({
+  status: "Fulfilled",
+  issue_date: { $lt: ISODate("2025-01-01T00:00:00Z") }
+});
+
+// Sort by latest issue date, show specific fields
+db.prescriptions.find(
+  {}, 
+  { patient_name: 1, medicine_name: 1, status: 1, _id: 0 }
+).sort({ issue_date: -1 });
