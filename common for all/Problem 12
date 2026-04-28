@@ -1,0 +1,26 @@
+// Insert many
+db.attendance.insertMany([
+  { rec_id: "ATT001", emp_name: "Alex", department: "Sales", date: "2026-05-02", status: "Present", check_in_time: "09:00 AM" },
+  { rec_id: "ATT002", emp_name: "Sam", department: "HR", date: "2026-05-02", status: "Leave", check_in_time: null },
+  { rec_id: "ATT003", emp_name: "Taylor", department: "Support", date: "2026-05-02", status: "Absent", check_in_time: null },
+  { rec_id: "ATT004", emp_name: "Jordan", department: "Finance", date: "2025-12-15", status: "Leave", check_in_time: null },
+  { rec_id: "ATT005", emp_name: "Casey", department: "Marketing", date: "2026-05-01", status: "Absent", check_in_time: "10:30 AM" }
+]);
+
+// Find absent in Support
+db.attendance.find({ status: "Absent", department: "Support" });
+
+// Update to Present if checked in
+db.attendance.updateMany(
+  { check_in_time: { $ne: null } },
+  { $set: { status: "Present" } }
+);
+
+// Delete old leave records
+db.attendance.deleteMany({
+  date: { $lt: "2026-01-01" },
+  status: "Leave"
+});
+
+// Find Present sorted by date
+db.attendance.find({ status: "Present" }).sort({ date: 1 });
