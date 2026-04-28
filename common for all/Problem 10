@@ -1,0 +1,27 @@
+// Insert one
+db.workouts.insertOne({ 
+  workout_id: "W001",
+  exercise_name: "Jogging",
+  duration_minutes: 20,
+  calories_burned: 150,
+  date: "2026-04-25",
+  intensity: "High"
+});
+
+// Insert many
+db.workouts.insertMany([
+  { workout_id: "W002", exercise_name: "Stretching", duration_minutes: 15, calories_burned: 50, date: "2026-04-24", intensity: "Low" },
+  { workout_id: "W003", exercise_name: "Cycling", duration_minutes: 30, calories_burned: 200, date: "2026-04-23", intensity: "High" },
+  { workout_id: "W004", exercise_name: "Push-ups", duration_minutes: 10, calories_burned: 100, date: "2026-04-22", intensity: "Medium" },
+  { workout_id: "W005", exercise_name: "Swimming", duration_minutes: 25, calories_burned: 180, date: "2026-04-21", intensity: "High" },
+  { workout_id: "W006", exercise_name: "Walking", duration_minutes: 30, calories_burned: 120, date: "2026-04-20", intensity: "Low" }
+]);
+
+// Find high intensity
+db.workouts.find({ intensity: "High" });
+
+// Show exercise, duration, calories
+db.workouts.find({}, { exercise_name: 1, duration_minutes: 1, calories_burned: 1, _id: 0 });
+
+// Delete
+db.workouts.deleteOne({ workout_id: "W001" });
